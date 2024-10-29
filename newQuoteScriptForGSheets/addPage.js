@@ -33,7 +33,7 @@ function searchvInSheet(
   return value;
 }
 
-function copySheetsToSpreadsheet(
+function addPageToSpreadsheet(
   actualSpreadsheet,
   sheetName,
   pageNumber,
@@ -74,7 +74,7 @@ function addPage() {
   const templateSheetName = searchvInSheet(scriptSheet, activeSheetName);
   const pageNumber = searchvInSheet(scriptSheet, "nextpage");
 
-  copySheetsToSpreadsheet(
+  addPageToSpreadsheet(
     actualSpreadsheet,
     templateSheetName,
     pageNumber,
