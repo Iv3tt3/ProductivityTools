@@ -30,14 +30,28 @@ function copySheetsToSpreadsheet(actualSpreadsheet, sheetName, pageNumber) {
   }
 }
 
+function searchInAColumnReturnBValue(actualSpreadsheet, nameToSearch) {
+  const scriptSheet = actualSpreadsheet.getSheetByName("scriptData");
+  const findInAColumn = scriptSheet
+    .getRange("A:A")
+    .createTextFinder(nameToSearch);
+  const cell = findInAColumn.findNext();
+  if (cell) {
+    const rowNum = cell.getRow();
+    const valueInB = scriptSheet.getRange("B" + rowNum).getValue();
+    return valueInB;
+  }
+}
+
 function addMH() {
   const actualSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
 
   const scriptSheet = actualSpreadsheet.getSheetByName("scriptData");
-  const sheetName = scriptSheet.getRange(cellSheetName).getValue();
+  const activeSheetName = actualSpreadsheet.getActiveSheet().getName();
+  const templateName = searchInAColumnReturnBValue(actualSpreadsheet, activeSheetName)
   const pageNumber = scriptSheet.getRange(cellCurrentPageNumber).getValue();
 
-  copySheetsToSpreadsheet(actualSpreadsheet, sheetName, pageNumber);
+  copySheetsToSpreadsheet(actualSpreadsheet, templateName, pageNumber);
 
   scriptSheet.getRange(cellCurrentPageNumber).setValue(pageNumber + 1);
 }
