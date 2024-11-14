@@ -1,4 +1,14 @@
+// Template Spreadsheet
+const temSpreadsheetID = "PUT_HERE_THE_ID";
+
 // GENERATE NEW QUOTE NUMBER
+function newQuoteNum(spreadsheet) {
+  const sheet = spreadsheet.getSheetByName("scriptENV");
+  const itemToSearch = "quoteNumOutput";
+  setNewQuoteNum(sheet);
+  const cell = searchCellInSheet(sheet, itemToSearch);
+  return sheet.getRange(cell).getValue();
+}
 // SET URL AND LINK TO TEMPLATE
 // SET QUOTE NUM TO NEWQUOTE IN DOC NAME AND IN DATA SHEET
 // DELETE FIRST PAGE (WITH BUTTON)
@@ -188,4 +198,15 @@ function oldCode() {
 
     scriptSheet.getRange(pageNumCell).setValue(pageNumber + 1);
   }
+}
+
+function createQuote() {
+  // Get template spreadsheet and active spreadsheet
+  const temSpreadsheet = SpreadsheetApp.openById(envSpreadsheetID);
+  const temSheet = envSpreadsheet.getSheetByName("scriptENV");
+  const activeSpreadSheet = SpreadsheetApp.getActiveSpreadsheet();
+  const activeSheet = activeSpreadSheet.getSheetByName("NUEVO");
+
+  // Get new quoteNum
+  const quoteNum = newQuoteNum(temSpreadsheet);
 }
