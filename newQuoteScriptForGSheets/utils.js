@@ -1,6 +1,6 @@
 // Find an item in a column and return the row number
 
-function getRowNum(sheet, itemToSearch, searchColumn = "A") {
+export function getRowNum(sheet, itemToSearch, searchColumn = "A") {
   const columnToSearch = `${searchColumn}:${searchColumn}`;
   const findInColumn = sheet
     .getRange(columnToSearch)
@@ -11,7 +11,7 @@ function getRowNum(sheet, itemToSearch, searchColumn = "A") {
 
 // Find an item in a range and return the cell number of the output value
 
-function searchCellInSheet(
+export function searchCellInSheet(
   sheet,
   itemToSearch,
   searchColumn = "A",
@@ -23,7 +23,7 @@ function searchCellInSheet(
 
 // Find an item in a range and return the output value
 
-function searchvInSheet(
+export function searchvInSheet(
   sheet,
   itemToSearch,
   searchColumn = "A",
@@ -41,7 +41,7 @@ function searchvInSheet(
 
 // Generate a dict with all the keys and values of a range
 
-function getDict(sheet, keyColumn = "A", valueColumn = "B") {
+export function getDict(sheet, keyColumn = "A", valueColumn = "B") {
   let newDict = {};
   const columnKeyRange = `${keyColumn}:${keyColumn}`;
   const lengthFor = sheet
