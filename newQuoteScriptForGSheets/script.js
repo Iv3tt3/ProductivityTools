@@ -203,7 +203,7 @@ function oldCode() {
 function createQuote() {
   // Get template spreadsheet and active spreadsheet
   const temSpreadsheet = SpreadsheetApp.openById(envSpreadsheetID);
-  const temSheet = envSpreadsheet.getSheetByName("scriptENV");
+  const temSheet = temSpreadsheet.getSheetByName("scriptENV");
   const activeSpreadSheet = SpreadsheetApp.getActiveSpreadsheet();
   const activeSheet = activeSpreadSheet.getSheetByName("NUEVO");
 
