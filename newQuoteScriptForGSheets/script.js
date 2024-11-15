@@ -30,13 +30,17 @@ function setIndexData(activeSpreadsheet, quoteNum) {
 
 // Set templates sheets to new spreadsheet
 function setSheets(activeSpreadsheet, temSpreadsheet) {
-  
   // copy templates
   const temSheet = temSpreadsheet.getSheetByName("scriptENV");
   const sheetsListToCopy = searchvInSheet(temSheet, "temSheetsList").split(",");
   sheetsListToCopy.forEach((sheetName) => {
     const sheet = temSpreadsheet.getSheetByName(sheetName);
     if (sheet) {
+      //change name if sheet exists
+      const existingSheet = activeSpreadsheet.getSheetByName(sheetName);
+      if (existingSheet) {
+        existingSheet.setName(("DELETE?" + sheetName).substring(0, 35)); //Limit sheet name in case is too long
+      }
       const copiedSheet = sheet.copyTo(activeSpreadsheet);
       copiedSheet.setName(sheetName);
     }
