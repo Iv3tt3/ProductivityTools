@@ -3,7 +3,7 @@ const temSpreadsheetID = "PUT-HERE-THE-ID";
 const indexSpreadsheetID = "PUT-HERE-THE-ID";
 
 // Folder for output
-const folderID = "PUT-HERE-THE-ID"
+const folderID = "PUT-HERE-THE-ID";
 
 // Generate new quote number
 function newQuoteNum(spreadsheet) {
@@ -33,7 +33,6 @@ function setIndexData(activeSpreadsheet, quoteNum) {
 
 // Set templates sheets to new spreadsheet
 function setSheets(activeSpreadsheet, temSpreadsheet) {
-  
   // copy templates
   const temSheet = temSpreadsheet.getSheetByName("scriptENV");
   const sheetsListToCopy = searchvInSheet(temSheet, "temSheetsList").split(",");
@@ -77,29 +76,33 @@ function createQuoteNEW() {
   // Set quoteNum and url to index spreadsheet
   setIndexData(activeSpreadsheet, quoteNum);
 
-    // Set spreadSheet name
-  activeSpreadsheet.setName(quoteNum)
+  // Set spreadSheet name
+  activeSpreadsheet.setName(quoteNum);
 
   // Set templates sheets to new spreadsheet
   setSheets(activeSpreadsheet, temSpreadsheet);
 
   // Set quote data
   setQuoteData(activeSpreadsheet, quoteNum);
-
 }
 
-
-function getSheetList(activeSpreadsheet){
+function getSheetList(activeSpreadsheet) {
   const sheet = activeSpreadsheet.getSheetByName("quoteData");
-  const sheetsListNames = searchvInSheet(sheet, "outputPagesList").split(",").map(name => name.trim());
-  const sheetsList = sheetsListNames.map(sheetName => activeSpreadsheet.getSheetByName(sheetName)).filter(hoja => hoja);
+  const sheetsListNames = searchvInSheet(sheet, "outputPagesList")
+    .split(",")
+    .map((name) => name.trim());
+  const sheetsList = sheetsListNames
+    .map((sheetName) => activeSpreadsheet.getSheetByName(sheetName))
+    .filter((hoja) => hoja);
   // Get IDs
-  const sheetIds = sheetsList.map(sheet => `gid=${sheet.getSheetId()}`).join("&");
-  return sheetIds
+  const sheetIds = sheetsList
+    .map((sheet) => `gid=${sheet.getSheetId()}`)
+    .join("&");
+  return sheetIds;
 }
 
-function setParamsToExport () {
- // Set params to export
+function setParamsToExport() {
+  // Set params to export
   const params = {
     format: "pdf",
     portrait: true, // Orientación vertical
@@ -111,9 +114,9 @@ function setParamsToExport () {
     gridlines: false, // Ocultar líneas de cuadrícula
     printtitle: false, // No incluir títulos
     sheetnames: false, // No incluir nombres de hojas
-    fitw: true
+    fitw: true,
   };
-  return params
+  return params;
 }
 function getExportUrl(activeSpreadsheet, sheetsIDs) {
   // Get Export URL
@@ -121,31 +124,33 @@ function getExportUrl(activeSpreadsheet, sheetsIDs) {
   const exportUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?`;
 
   // Set params to export
-  const params = setParamsToExport()
+  const params = setParamsToExport();
 
   // Generate URL with params
-  const queryParams = Object.keys(params).map(key => `${key}=${params[key]}`).join("&");
+  const queryParams = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
 
   // Crear la URL final
   const finalUrl = `${exportUrl}${queryParams}&${sheetsIDs}`;
 
-  return finalUrl
+  return finalUrl;
 }
 
-function fetchURL (exportUrl) {
+function fetchURL(exportUrl) {
   const token = ScriptApp.getOAuthToken();
   const response = UrlFetchApp.fetch(exportUrl, {
     headers: { Authorization: `Bearer ${token}` },
   });
-  return response
+  return response;
 }
 
-function savePdfToDrive (activeSpreadsheet, response) {
+function savePdfToDrive(activeSpreadsheet, response) {
   const quoteName = activeSpreadsheet.getName();
 
   const fileName = `${quoteName}_${new Date().toISOString().slice(0, 10)}.pdf`;
   const blob = response.getBlob().setName(fileName);
-  const folder = DriveApp.getFolderById(folderID)
+  const folder = DriveApp.getFolderById(folderID);
   folder.createFile(blob);
 }
 
@@ -153,14 +158,14 @@ function exportPdf() {
   const activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet();
 
   // Get IDs of sheets to export
-  const sheetsIDs = getSheetList(activeSpreadsheet)
+  const sheetsIDs = getSheetList(activeSpreadsheet);
 
   // Get URL to export
-  const exportUrl = getExportUrl(activeSpreadsheet, sheetsIDs)
+  const exportUrl = getExportUrl(activeSpreadsheet, sheetsIDs);
 
   // Fetch URL
-  const response = fetchURL(exportUrl)
+  const response = fetchURL(exportUrl);
 
   // Save PDF to Output Folder in Drive
-  savePdfToDrive(activeSpreadsheet, response)
+  savePdfToDrive(activeSpreadsheet, response);
 }
