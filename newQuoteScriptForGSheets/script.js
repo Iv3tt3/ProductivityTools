@@ -53,6 +53,12 @@ function setSheets(activeSpreadsheet, temSpreadsheet) {
   }
 }
 
+function setQuoteData(activeSpreadSheet, quoteNum) {
+  const sheet = activeSpreadSheet.getSheetByName("quoteData");
+  const cell = searchCellInSheet(sheet, "quoteNum");
+  sheet.getRange(cell).setValue(quoteNum);
+}
+
 function createQuoteNEW() {
   // Get template needed sheets
   const temSpreadsheet = SpreadsheetApp.openById(temSpreadsheetID);
@@ -69,4 +75,7 @@ function createQuoteNEW() {
 
   // Set templates sheets to new spreadsheet
   setSheets(activeSpreadsheet, temSpreadsheet);
+
+  // Set quote data
+  setQuoteData(activeSpreadsheet, quoteNum);
 }
