@@ -3,6 +3,7 @@ import pandas as pd
 import time
 
 def get_name(url):
+    #URL input example: https://cdn.domainon.com/records/2581481-3790983/b6d23bjd-j343-sk22-9987-123kdj2k2jsd-30-11-22-09h36-34612345678-34687654321.mp3
     from_phone = (f'+{url[(url.rfind("/")+53):(url.rfind("-"))]}')
     year = (f'+{url[(url.rfind("/")+44):(url.rfind("/")+46)]}')
     month = (f'+{url[(url.rfind("/")+41):(url.rfind("/")+43)]}')
@@ -10,7 +11,7 @@ def get_name(url):
     hour = (f'+{url[(url.rfind("/")+47):(url.rfind("/")+52)]}')
     id = (url[(url.rfind("/")+25):(url.rfind("/")+37)])
     name = f'{from_phone}-{year}{month}{day}-{hour}-{id}.mp3'
-    return name
+    return name #Output name example: +34612345678-221130-09h36-123kdj2k2jsd.mp3
 
 def save_to_csv(file_path, list):
     #Read csv file
@@ -48,10 +49,12 @@ def download_list_MP3(url_list):
         print(n)
         time.sleep(300) #Cada 5 MIN
 
+#Open excel file with data (INTRODUCE HERE THE PATH)
+f_path = '.list.xlsx' 
 
-f_path = '.list.xlsx'
+#Read data of column A and create a list
 df = pd.read_excel(f_path, header=None, usecols="A", engine='openpyxl')
-
 url_list = df[0].dropna().astype(str).tolist()
 
+#Download mp3 files from the url list
 download_list_MP3(url_list)
